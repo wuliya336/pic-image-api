@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/wuliya336/pic-image-api/compare/v0.1.3...v0.1.4) (2025-08-10)
+
+
+### 🎡 持续集成
+
+* **release:** 添加列出构建产物的步骤 ([09ecc8e](https://github.com/wuliya336/pic-image-api/commit/09ecc8ed3a28d1d30ebcfcd798b1954db02ac838))
+
 ## [0.1.3](https://github.com/wuliya336/pic-image-api/compare/v0.1.2...v0.1.3) (2025-08-10)
 
 
