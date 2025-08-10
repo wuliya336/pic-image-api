@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/wuliya336/pic-image-api/compare/v0.1.5...v0.1.6) (2025-08-10)
+
+
+### 🎡 持续集成
+
+* **release:** 更新构建产物导入路径 ([dbf9d36](https://github.com/wuliya336/pic-image-api/commit/dbf9d363f1f7a11230c2c802e641e787d0a35d69))
+
 ## [0.1.5](https://github.com/wuliya336/pic-image-api/compare/v0.1.4...v0.1.5) (2025-08-10)
 
 
