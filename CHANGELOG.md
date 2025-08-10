@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/wuliya336/pic-image-api/compare/v0.1.1...v0.1.2) (2025-08-10)
+
+
+### 🎡 持续集成
+
+* 更新 GitHub Actions 工作流配置 ([cd90e96](https://github.com/wuliya336/pic-image-api/commit/cd90e96c9c008aa9049eb127a4d350873640210d))
+
 ## [0.1.1](https://github.com/wuliya336/pic-image-api/compare/v0.1.0...v0.1.1) (2025-08-10)
 
 
