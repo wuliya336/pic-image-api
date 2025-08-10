@@ -52,7 +52,7 @@ jobs:
       - name: 导入构建产物
         uses: actions/download-artifact@v4
         with:
-          path: ./artifacts
+          pattern: pic-image-api-*
           merge-multiple: true
 
       - name: 列出构建产物
@@ -64,4 +64,4 @@ jobs:
           name: ${{ needs.release.outputs.tag_name }}
           tag_name: ${{ needs.release.outputs.tag_name }}
           token: ${{ steps.app-token.outputs.token }}
-          files: ./artifacts/*
+          files: pic-image-api-*
