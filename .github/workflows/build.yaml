@@ -33,7 +33,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: 设置 Rust 工具链
-        uses: dtolnay/rust-toolchain@1.85.0
+        uses: dtolnay/rust-toolchain@stable
 
       - name: 设置 Rust 缓存
         uses: swatinem/rust-cache@v2
