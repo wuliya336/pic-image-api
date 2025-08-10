@@ -54,6 +54,9 @@ jobs:
         with:
           path: ./
 
+      - name: 列出构建产物
+        run: ls -R
+
       - name: 发布到Release
         uses: softprops/action-gh-release@v2
         with:
