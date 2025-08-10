@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/wuliya336/pic-image-api/compare/v0.1.2...v0.1.3) (2025-08-10)
+
+
+### 🎡 持续集成
+
+* **release:** 移除导入构建产物步骤 ([b97ce9b](https://github.com/wuliya336/pic-image-api/commit/b97ce9bdfeae52711fa3e30be8640af6c9fc9a76))
+
 ## [0.1.2](https://github.com/wuliya336/pic-image-api/compare/v0.1.1...v0.1.2) (2025-08-10)
 
 
