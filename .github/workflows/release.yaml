@@ -51,6 +51,8 @@ jobs:
 
       - name: 导入构建产物
         uses: actions/download-artifact@v4
+        with:
+          path: ./
 
       - name: 发布到Release
         uses: softprops/action-gh-release@v2
