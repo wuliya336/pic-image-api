@@ -53,6 +53,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: ./
+          merge-multiple: true
 
       - name: 列出构建产物
         run: ls -R
