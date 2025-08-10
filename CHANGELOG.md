@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.9](https://github.com/wuliya336/pic-image-api/compare/v0.1.8...v0.1.9) (2025-08-10)
+
+
+### 🎡 持续集成
+
+* **release:** 更新发布工作流配置 ([7f8517c](https://github.com/wuliya336/pic-image-api/commit/7f8517c630633b09f9cec13f5dab4bea49d4de1e))
+
 ## [0.1.8](https://github.com/wuliya336/pic-image-api/compare/v0.1.7...v0.1.8) (2025-08-10)
 
 
