@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/wuliya336/pic-image-api/compare/v0.1.4...v0.1.5) (2025-08-10)
+
+
+### 🎡 持续集成
+
+* **release:** 修改发布到 Release 的文件路径 ([3003c8e](https://github.com/wuliya336/pic-image-api/commit/3003c8e030585b430e2652dcce28ebb1df89ed15))
+
 ## [0.1.4](https://github.com/wuliya336/pic-image-api/compare/v0.1.3...v0.1.4) (2025-08-10)
 
 
