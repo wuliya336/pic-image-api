@@ -95,6 +95,7 @@ pub fn log_init() {
 
     let subscriber = tracing_subscriber::registry().with(layers);
 
-    tracing::subscriber::set_global_default(subscriber).unwrap();
-    tracing_log::LogTracer::init().unwrap();
+    if tracing::subscriber::set_global_default(subscriber).is_err() || tracing_log::LogTracer::init().is_err(){
+        return;
+    }
 }
