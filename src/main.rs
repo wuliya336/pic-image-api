@@ -5,7 +5,6 @@ use actix_web::{
 };
 use dotenv::dotenv;
 use std::env;
-use tracing_actix_web::TracingLogger;
 
 mod middleware;
 mod utils;
@@ -30,7 +29,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
-            .wrap(TracingLogger::default())
+            .wrap(middleware::access_log::AccessLog)
             .wrap(NormalizePath::new(TrailingSlash::Trim))
             .app_data(web::QueryConfig::default().error_handler(query_error_handler))
             .configure(register_routes)

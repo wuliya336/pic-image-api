@@ -2,6 +2,7 @@ use chrono_tz::Asia::Shanghai;
 use owo_colors::OwoColorize;
 use std::{env, fmt};
 use tracing::Subscriber;
+use tracing_appender::rolling::{RollingFileAppender, Rotation};
 use tracing_subscriber::{
     Layer,
     filter::LevelFilter,
@@ -10,7 +11,7 @@ use tracing_subscriber::{
     registry::LookupSpan,
 };
 struct Formatter {
-    show_target: bool,
+    color: bool,
 }
 
 impl<S, N> FormatEvent<S, N> for Formatter
@@ -24,7 +25,12 @@ where
         mut writer: tracing_subscriber::fmt::format::Writer<'_>,
         event: &tracing::Event<'_>,
     ) -> fmt::Result {
-        let prefix = "[PIC-IMAGE-API]".magenta().to_string();
+
+        let prefix = if self.color {
+            "[PIC-IMAGE-API]".magenta().to_string()
+        } else {
+            "[PIC-IMAGE-API]".to_string()
+        };
         write!(writer, "{} ", prefix)?;
 
         let local_time = chrono::Local::now();
@@ -33,18 +39,19 @@ where
         write!(writer, "[{}] ", formatted_time)?;
 
         let logger_level = event.metadata().level();
-        let colored_level = match *logger_level {
-            tracing::Level::ERROR => logger_level.red().to_string(),
-            tracing::Level::WARN => logger_level.yellow().to_string(),
-            tracing::Level::INFO => logger_level.green().to_string(),
-            tracing::Level::DEBUG => logger_level.blue().to_string(),
-            tracing::Level::TRACE => logger_level.magenta().to_string(),
-        };
-        write!(writer, "[{: <17}] ", colored_level)?;
-
-        if self.show_target {
-            write!(writer, "[{}] ", event.metadata().target().purple())?;
+        if self.color {
+            let colored_level = match *logger_level {
+                tracing::Level::ERROR => logger_level.red().to_string(),
+                tracing::Level::WARN => logger_level.yellow().to_string(),
+                tracing::Level::INFO => logger_level.green().to_string(),
+                tracing::Level::DEBUG => logger_level.blue().to_string(),
+                tracing::Level::TRACE => logger_level.magenta().to_string(),
+            };
+            write!(writer, "[{: <17}] ", colored_level)?;
+        } else {
+            write!(writer, "[{: <7}] ", logger_level)?;
         }
+
 
         ctx.format_fields(writer.by_ref(), event)?;
         writeln!(writer)
@@ -55,29 +62,38 @@ pub fn log_init() {
     let debug_mode = env::var("DEBUG")
         .map(|v| v.to_lowercase() == "true")
         .unwrap_or(false);
-    let level = if debug_mode {
+
+    let logger_level = if debug_mode {
         LevelFilter::DEBUG
     } else {
         LevelFilter::INFO
     };
 
-    let logger_level = match level {
-        LevelFilter::OFF => LevelFilter::OFF,
-        LevelFilter::ERROR => LevelFilter::ERROR,
-        LevelFilter::WARN => LevelFilter::WARN,
-        LevelFilter::INFO => LevelFilter::INFO,
-        LevelFilter::DEBUG => LevelFilter::DEBUG,
-        LevelFilter::TRACE => LevelFilter::TRACE,
-    };
-
-    let show_target = matches!(logger_level, LevelFilter::DEBUG | LevelFilter::TRACE);
-
-    // 创建控制台日志层
     let console_subscriber = tracing_subscriber::fmt::layer()
-        .event_format(Formatter { show_target })
+        .event_format(Formatter { color: true })
         .with_filter(logger_level);
 
-    let subscriber = tracing_subscriber::registry().with(console_subscriber);
+    let mut layers = vec![console_subscriber.boxed()];
+
+    let log_dir = "logs".to_string();
+    let _ = std::fs::create_dir_all(&log_dir);
+    let file_appender = RollingFileAppender::builder()
+        .rotation(Rotation::DAILY)
+        .filename_prefix("pic-image-api")
+        .filename_suffix("log")
+        .max_log_files(7)
+        .build(&log_dir)
+        .unwrap();
+
+    let file_subscriber = tracing_subscriber::fmt::layer()
+        .event_format(Formatter { color: false })
+        .with_writer(file_appender)
+        .with_ansi(false)
+        .with_filter(logger_level);
+
+    layers.push(file_subscriber.boxed());
+
+    let subscriber = tracing_subscriber::registry().with(layers);
 
     tracing::subscriber::set_global_default(subscriber).unwrap();
     tracing_log::LogTracer::init().unwrap();

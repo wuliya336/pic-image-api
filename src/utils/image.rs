@@ -11,6 +11,7 @@ pub fn send_image(data: Vec<u8>) -> HttpResponse {
 }
 
 /// 随机图片结构体
+#[allow(dead_code)]
 pub struct RandomImage {
     /// 图片路径
     pub path: String,
