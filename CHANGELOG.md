@@ -1,5 +1,12 @@
 # 变更日志
 
+## [0.2.1](https://github.com/wuliya336/pic-image-api/compare/v0.2.0...v0.2.1) (2025-08-16)
+
+
+### ♻️ 代码重构
+
+* **utils:** 简化 get_mime_type 函数 ([0aa116d](https://github.com/wuliya336/pic-image-api/commit/0aa116d978ac6f1625f464f87960a64c5ce7612f))
+
 ## [0.2.0](https://github.com/wuliya336/pic-image-api/compare/v0.1.2...v0.2.0) (2025-08-11)
 
 
