@@ -96,20 +96,17 @@ pub async fn get_random_file_path(path: &Path, exp: Option<Vec<&str>>) -> Result
 
 /// 获取文件的 MIME 类型
 ///
-/// 该函数首先尝试通过文件内容来推断 MIME 类型，
-/// 如果推断失败，则根据文件扩展名来猜测 MIME 类型。
+/// 该函数通过文件内容来推断 MIME 类型，
+/// 如果推断失败，则返回默认的 MIME 类型。
 ///
 /// # 参数
-/// * `filename` - 文件名，用于根据扩展名猜测 MIME 类型
-/// * `buffer` - 文件内容的字节缓冲区，用于内容类型推断
+/// * `data` - 文件内容的字节数据，用于内容类型推断
 ///
 /// # 返回值
-/// 返回推断出的 MIME 类型字符串
+/// 返回推断出的 MIME 类型字符串，如果推断失败则返回 "application/octet-stream"
+
 pub fn get_mime_type(data: &[u8]) -> String {
-    let buffer = infer::get(data);
-    let mime_type = match buffer {
-        Some(kind) => kind.mime_type().to_string(),
-        None => "application/octet-stream".to_string(),
-    };
-    mime_type
+    infer::get(data)
+        .map(|kind| kind.mime_type().to_string())
+        .unwrap_or("application/octet-stream".to_string())
 }
