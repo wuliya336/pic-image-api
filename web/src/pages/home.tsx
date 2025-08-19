@@ -7,7 +7,6 @@ import logo from '@/assets/logo.png'
 interface ApiInfo {
     name: string;
     description: string;
-    is_cross_platform: boolean;
     folder_name: string;
 }
 
@@ -31,17 +30,6 @@ export default function Home() {
     const [apiList, setApiList] = useState<ApiInfo[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
 
-    const filteredApiList = useMemo(() => {
-        if (searchTerm === '') {
-            return apiList;
-        } else {
-            return apiList.filter(api =>
-                api.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                api.description.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-        }
-    }, [apiList, searchTerm]);
-
     const getApiList = async () => {
         try {
             const res = await axios.get('/admin/infos');
@@ -53,9 +41,24 @@ export default function Home() {
 
     useEffect(() => {
         getApiList().then((list) => {
-            setApiList(list);
+            if (list) {
+                setApiList(list);
+            } else {
+                setApiList([]);
+            }
         });
     }, []);
+
+    const filteredApiList = useMemo(() => {
+        if (searchTerm === '') {
+            return apiList;
+        } else {
+            return apiList.filter(api =>
+                api.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                api.description.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+    }, [apiList, searchTerm]);
 
     const handleSearch = (value: string) => {
         setSearchTerm(value);
