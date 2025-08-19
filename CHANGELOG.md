@@ -1,5 +1,22 @@
 # 变更日志
 
+## [0.3.0](https://github.com/wuliya336/pic-image-api/compare/v0.2.0...v0.3.0) (2025-08-19)
+
+
+### ✨ 新功能
+
+* 添加站点配置功能并优化相关功能 ([2608097](https://github.com/wuliya336/pic-image-api/commit/2608097d20e9a82ac140c7814a1ada86517feb5a))
+
+
+### 🐛 错误修复
+
+* 修正前端获取后端数据失败无法加载页面 ([f49ea8d](https://github.com/wuliya336/pic-image-api/commit/f49ea8db2fce7999ec1fc757287f34b1d0077de8))
+
+
+### ♻️ 代码重构
+
+* **utils:** 简化 get_mime_type 函数 ([0aa116d](https://github.com/wuliya336/pic-image-api/commit/0aa116d978ac6f1625f464f87960a64c5ce7612f))
+
 ## [0.2.0](https://github.com/wuliya336/pic-image-api/compare/v0.1.2...v0.2.0) (2025-08-11)
 
 
