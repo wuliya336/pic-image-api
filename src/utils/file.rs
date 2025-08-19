@@ -1,8 +1,12 @@
-use crate::{utils::error::Error};
-use actix_web::http::StatusCode;
+use crate::utils::error::Error;
 use actix_web::HttpResponse;
-use rand::{rng, Rng};
+use actix_web::http::StatusCode;
+#[cfg(not(debug_assertions))]
+use mime_infer;
+use rand::{Rng, rng};
 use std::path::Path;
+use serde::de::DeserializeOwned;
+use toml::from_str;
 use tokio::fs;
 
 /// 发送文件内容
@@ -38,6 +42,16 @@ pub fn send_file_with_status(data: Vec<u8>, status_code: StatusCode) -> HttpResp
         .body(data)
 }
 
+pub fn read_config<D>(path: &Path, name: &str) -> Result<D, Error>
+where
+    D: DeserializeOwned,
+{
+    let full_path = path.join(format!("{}.toml", name));
+    let config_str = std::fs::read_to_string(full_path).map_err(Error::Io)?;
+    let config: D = from_str(&config_str).map_err(Error::Toml)?;
+    Ok(config)
+}
+
 /// 随机从一个目录返回一个文件的路径
 ///
 /// # 参数
@@ -51,12 +65,12 @@ pub async fn get_random_file_path(path: &Path, exp: Option<Vec<&str>>) -> Result
 
     let mut entries = fs::read_dir(path)
         .await
-        .map_err(|err| Error::IoError(err.to_string()))?;
+        .map_err(Error::Io)?;
 
     while let Some(entry) = entries
         .next_entry()
         .await
-        .map_err(|err| Error::IoError(err.to_string()))?
+        .map_err(Error::Io)?
     {
         let path = entry.path();
         let metadata = fs::metadata(&path).await;
@@ -85,14 +99,13 @@ pub async fn get_random_file_path(path: &Path, exp: Option<Vec<&str>>) -> Result
     }
 
     if valid_files.is_empty() {
-        return Err(Error::IoError("目录中没有文件".to_string()));
+        return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::NotFound, "目录中没有文件")));
     }
 
     let mut rng = rng();
     let random_index = rng.random_range(0..valid_files.len());
     Ok(valid_files[random_index].clone())
 }
-
 
 /// 获取文件的 MIME 类型
 ///
@@ -104,9 +117,25 @@ pub async fn get_random_file_path(path: &Path, exp: Option<Vec<&str>>) -> Result
 ///
 /// # 返回值
 /// 返回推断出的 MIME 类型字符串，如果推断失败则返回 "application/octet-stream"
-
 pub fn get_mime_type(data: &[u8]) -> String {
     infer::get(data)
         .map(|kind| kind.mime_type().to_string())
         .unwrap_or("application/octet-stream".to_string())
+}
+
+#[cfg(not(debug_assertions))]
+/// 通过文件扩展名获取 MIME 类型
+///
+/// 该函数通过文件路径的扩展名来推断 MIME 类型，
+/// 如果推断失败，则返回默认的 MIME 类型。
+///
+/// # 参数
+/// * [path] - 文件路径，用于提取扩展名
+///
+/// # 返回值
+/// 返回推断出的 MIME 类型字符串，如果推断失败则返回 "application/octet-stream"
+pub fn get_mime_type_from_extension(path: &str) -> String {
+    mime_infer::from_path(path)
+        .first_or_octet_stream()
+        .to_string()
 }

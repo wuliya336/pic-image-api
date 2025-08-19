@@ -21,6 +21,10 @@ rand = { version = "0.9.2" }
 infer = { version = "0.19.0" }
 tracing-appender = "0.2.3"
 futures-util = { version = "0.3.31" }
+rust-embed = { version = "8.7.2", features = ["actix-web"]}
+mime-infer = "4.0.0"
+actix-files = { version = "0.6.6" }
+toml = "0.9.5"
 
 [lints.clippy]
 uninlined_format_args = "allow"

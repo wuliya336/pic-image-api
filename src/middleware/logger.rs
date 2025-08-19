@@ -25,7 +25,6 @@ where
         mut writer: tracing_subscriber::fmt::format::Writer<'_>,
         event: &tracing::Event<'_>,
     ) -> fmt::Result {
-
         let prefix = if self.color {
             "[PIC-IMAGE-API]".magenta().to_string()
         } else {
@@ -51,7 +50,6 @@ where
         } else {
             write!(writer, "[{: <7}] ", logger_level)?;
         }
-
 
         ctx.format_fields(writer.by_ref(), event)?;
         writeln!(writer)
@@ -95,7 +93,8 @@ pub fn log_init() {
 
     let subscriber = tracing_subscriber::registry().with(layers);
 
-    if tracing::subscriber::set_global_default(subscriber).is_err() || tracing_log::LogTracer::init().is_err(){
-        return;
+    if tracing::subscriber::set_global_default(subscriber).is_err()
+        || tracing_log::LogTracer::init().is_err()
+    {
     }
 }

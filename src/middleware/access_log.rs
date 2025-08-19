@@ -1,13 +1,13 @@
 use actix_web::{
+    Error,
     dev::{Service, ServiceRequest, ServiceResponse, Transform},
     http::header::HeaderMap,
-    Error,
 };
 use futures_util::future::LocalBoxFuture;
 use log::info;
 use std::net::IpAddr;
 use std::{
-    future::{ready, Ready},
+    future::{Ready, ready},
     time::Instant,
 };
 

@@ -1,5 +1,9 @@
 use crate::utils::json::send_json_with_status;
-use actix_web::{error::{InternalError, QueryPayloadError}, http::StatusCode, Error as HTTP_ERROR, HttpRequest};
+use actix_web::{
+    Error as HTTP_ERROR, HttpRequest,
+    error::{InternalError, QueryPayloadError},
+    http::StatusCode,
+};
 use serde::Serialize;
 use thiserror::Error;
 
@@ -18,20 +22,15 @@ pub struct ErrorResponse {
 pub enum Error {
     #[error("IO错误: {0}")]
     /// IO错误
-    IoError(String),
-    #[error("读取文件错误: {0}")]
-    /// 读取文件错误
-    ReadFileError(String),
+    Io(#[from] std::io::Error),
+    #[error("JSON解析错误: {0}")]
+    /// JSON解析错误
+    Json(#[from] serde_json::Error),
+    #[error("TOML解析错误: {0}")]
+    Toml(#[from] toml::de::Error),
     // #[error("其他错误: {0}")]
     // 其他错误
     // Other(String),
-}
-
-/// IO错误处理
-impl From<std::io::Error> for Error {
-    fn from(err: std::io::Error) -> Self {
-        Error::IoError(format!("IO错误: {}", err))
-    }
 }
 
 /// 查询参数错误处理

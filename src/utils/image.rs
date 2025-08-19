@@ -1,5 +1,6 @@
-use crate::{
-    utils::{error::Error, file::{get_random_file_path, send_file}},
+use crate::utils::{
+    error::Error,
+    file::{get_random_file_path, send_file},
 };
 use actix_web::HttpResponse;
 use std::path::Path;
@@ -37,7 +38,7 @@ pub async fn get_random_image(path: &Path) -> Result<RandomImage, Error> {
     let image_path = get_random_file_path(path, Some(vec!["png", "jpg", "jpeg", "webp"])).await?;
     let image_data = fs::read(&image_path)
         .await
-        .map_err(|err| Error::ReadFileError(err.to_string()))?;
+        .map_err(|err| Error::Io(err))?;
     Ok(RandomImage {
         path: image_path,
         data: image_data,
